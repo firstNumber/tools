@@ -1,0 +1,8 @@
+package ${pkgPath};
+
+import java.io.Serializable;
+
+public class ${clzName} implements Serializable {
+${fieldsDeclareInfo}
+
+}

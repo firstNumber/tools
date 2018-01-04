@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-init-method="init" default-destroy-method="destroy"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+  http://www.springframework.org/schema/beans/spring-beans.xsd  ">
+
+	<!-- 线程执行器配置，用于任务注册 -->
+	<bean id="executor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="10" />
+		<property name="maxPoolSize" value="100" />
+		<property name="queueCapacity" value="500" />
+	</bean>
+	<!-- 要调用的工作类 -->
+	<bean id="quartzService" class="com.zhidian.common.quartz.QuartzService"></bean>
+	
+	<!-- 定义调用对象和调用对象的方法 -->
+	<bean id="test1Job" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value = "com.zhidian.common.quartz.MyDetailQuartzJobBean" />
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap"> 
+			<map>
+				<entry key="targetObject" value="quartzService" />
+				<entry key="targetMethod" value="test1" />
+			</map>
+		</property>
+	</bean>
+	<!-- 定义触发时间 -->
+	<bean id="test1Trigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="test1Job" />
+		<property name="cronExpression" value="0 */2 * * * ?" /><!--  20秒测试 -->
+	</bean>
+
+
+	<!-- 定义调用对象和调用对象的方法 -->
+	<bean id="pullDriverStatusJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value = "com.zhidian.common.quartz.MyDetailQuartzJobBean" />
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap"> 
+			<map>
+				<entry key="targetObject" value="quartzService" />
+				<entry key="targetMethod" value="pullDriverStatus" />
+			</map>
+		</property>
+	</bean>
+	<!-- 定义触发时间 -->
+	<bean id="pullDriverStatusTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="pullDriverStatusJob" />
+		<property name="cronExpression" value="0 */2 * * * ?" /><!--  2分钟一次 -->
+	</bean>
+	
+	
+	
+	<!-- 定义调用对象和调用对象的方法 -->
+	<bean id="cancelOrderByTimeOutJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value = "com.zhidian.common.quartz.MyDetailQuartzJobBean" />
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap"> 
+			<map>
+				<entry key="targetObject" value="quartzService" />
+				<entry key="targetMethod" value="cancelOrderByTimeOut" />
+			</map>
+		</property>
+	</bean>
+	<!-- 定义触发时间 -->
+	<bean id="cancelOrderByTimeOutTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="cancelOrderByTimeOutJob" />
+		<property name="cronExpression" value="0 */10 * * * ?" /><!--  10分钟一次 -->
+	</bean>
+	
+	<!-- 定义调用对象和调用对象的方法 -->
+	<bean id="driverRemindReceiverJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value = "com.zhidian.common.quartz.MyDetailQuartzJobBean" />
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap"> 
+			<map>
+				<entry key="targetObject" value="quartzService" />
+				<entry key="targetMethod" value="driverRemindReceiver" />
+			</map>
+		</property>
+	</bean>
+	<!-- 定义触发时间 -->
+	<bean id="driverRemindReceiverTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="driverRemindReceiverJob" />
+		<property name="cronExpression" value="0 0 20 ? * *" /><!--  晚上8点 -->
+	</bean>
+	
+	<!-- 定义调用对象和调用对象的方法 -->
+	<bean id="driverRemindTimeoutJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value = "com.zhidian.common.quartz.MyDetailQuartzJobBean" />
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap"> 
+			<map>
+				<entry key="targetObject" value="quartzService" />
+				<entry key="targetMethod" value="driverRemindTimeout" />
+			</map>
+		</property>
+	</bean>
+	<!-- 定义触发时间 -->
+	<bean id="driverRemindTimeoutTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="driverRemindTimeoutJob" />
+		<property name="cronExpression" value="0 0 9 ? * *" /><!--  早上9点 -->
+	</bean>	
+	
+	
+	<!-- 定义调用对象和调用对象的方法 -->
+	<bean id="remindReceiverAffirmJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value = "com.zhidian.common.quartz.MyDetailQuartzJobBean" />
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap"> 
+			<map>
+				<entry key="targetObject" value="quartzService" />
+				<entry key="targetMethod" value="remindReceiverAffirm" />
+			</map>
+		</property>
+	</bean>
+	<!-- 定义触发时间 -->
+	<bean id="remindReceiverAffirmTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="remindReceiverAffirmJob" />
+		<property name="cronExpression" value="0 0 18 ? * *" /><!--  晚上6点 -->
+	</bean>	
+	
+	
+	<!-- 定义调用对象和调用对象的方法 -->
+	<bean id="cancelOrderByDateOutJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value = "com.zhidian.common.quartz.MyDetailQuartzJobBean" />
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap"> 
+			<map>
+				<entry key="targetObject" value="quartzService" />
+				<entry key="targetMethod" value="cancelOrderByDateOut" />
+			</map>
+		</property>
+	</bean>
+	<!-- 定义触发时间 -->
+	<bean id="cancelOrderByDateOutTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="cancelOrderByDateOutJob" />
+		<property name="cronExpression" value="0 1 0 ? * *" /><!--  凌晨1分 -->
+	</bean>	
+	
+
+	<!-- 总管理类 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!-- 同步司机 -->
+				<ref bean="pullDriverStatusTrigger" />	
+				<!-- 10分钟自动取消发布超过6小时,没人抢的订单 -->	
+				<ref bean="cancelOrderByTimeOutTrigger" />	
+				<!-- 每天晚上,当日应完成但是未完成的订单,提醒司机去催收货人 -->	
+				<ref bean="driverRemindReceiverTrigger" />	
+				<!-- 每天早上,昨日应完成但是未完成的订单,提醒司机 -->	
+				<ref bean="driverRemindTimeoutTrigger" />	
+				<!-- 每天晚上,提醒收货人 确认收货 -->	
+				<ref bean="remindReceiverAffirmTrigger" />	
+				<!-- 取消已过了发货日期的订单 -->	
+				<ref bean="cancelOrderByDateOutTrigger" />	
+				<!-- 测试 -->	
+<!-- 				<ref bean="test1Trigger" />			 -->
+			</list>
+		</property>
+		<property name="taskExecutor" ref="executor" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:quartz.properties" />
+		<property name="startupDelay" value="10"/><!-- 延迟加载10秒 -->
+		<!--QuartzScheduler 启动时更新己存在的Job，这样就不用每次修改targetObject后删除qrtz_job_details表对应记录了,但是貌似没生效啊 啊啊啊啊啊 -->  
+		<property name="overwriteExistingJobs" value="true" />
+	</bean>
+
+</beans>
